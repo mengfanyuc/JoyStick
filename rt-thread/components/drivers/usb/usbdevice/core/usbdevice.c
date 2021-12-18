@@ -99,7 +99,7 @@ rt_err_t rt_usb_device_init(void)
     rt_device_t udc;
     udevice_t udevice;
     uconfig_t cfg;
-    ufunction_t func;
+    ufunction_t func = RT_NULL;
     rt_list_t *i;
     udclass_t udclass;
 
@@ -147,7 +147,8 @@ rt_err_t rt_usb_device_init(void)
         rt_usbd_device_set_qualifier(udevice, &dev_qualifier);
     }
 #else
-    rt_usbd_device_set_descriptor(udevice, func->dev_desc);
+    if(func != RT_NULL)
+        rt_usbd_device_set_descriptor(udevice, func->dev_desc);
 #endif
 
     /* add the configuration to the device */
