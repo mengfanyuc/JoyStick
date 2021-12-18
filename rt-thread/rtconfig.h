@@ -33,9 +33,11 @@
 /* Kernel Device Object */
 
 #define RT_USING_DEVICE
-#define RT_USING_CONSOLE
-#define RT_CONSOLEBUF_SIZE 128
-#define RT_CONSOLE_DEVICE_NAME "uart1"
+#ifdef CMAKE_DEBUG
+    #define RT_USING_CONSOLE
+    #define RT_CONSOLEBUF_SIZE 128
+    #define RT_CONSOLE_DEVICE_NAME "uart1"
+#endif
 #define RT_VER_NUM 0x40004
 #define ARCH_ARM
 #define RT_USING_CPU_FFS
@@ -54,29 +56,31 @@
 
 /* Command shell */
 
-#define RT_USING_FINSH
-#define FINSH_THREAD_NAME "tshell"
-#define FINSH_USING_SYMTAB
-#define FINSH_USING_DESCRIPTION
-#define FINSH_THREAD_PRIORITY 20
-#define FINSH_THREAD_STACK_SIZE 2048
-#define FINSH_CMD_SIZE 80
-#define FINSH_USING_MSH
-#define FINSH_USING_MSH_DEFAULT
-#define FINSH_USING_MSH_ONLY
-#define FINSH_ARG_MAX 10
-
+#ifdef CMAKE_DEBUG
+    #define RT_USING_FINSH
+    #define FINSH_THREAD_NAME "tshell"
+    #define FINSH_USING_SYMTAB
+    #define FINSH_USING_DESCRIPTION
+    #define FINSH_THREAD_PRIORITY 20
+    #define FINSH_THREAD_STACK_SIZE 2048
+    #define FINSH_CMD_SIZE 80
+    #define FINSH_USING_MSH
+    #define FINSH_USING_MSH_DEFAULT
+    #define FINSH_USING_MSH_ONLY
+    #define FINSH_ARG_MAX 10
+#endif
 /* Device virtual file system */
 
 
 /* Device Drivers */
 
-#define RT_USING_DEVICE_IPC
-#define RT_PIPE_BUFSZ 512
-#define RT_USING_SERIAL
-#define RT_USING_SERIAL_V1
-#define RT_SERIAL_USING_DMA
-#define RT_SERIAL_RB_BUFSZ 64
+#ifdef CMAKE_DEBUG
+    #define RT_USING_DEVICE_IPC
+    #define RT_PIPE_BUFSZ 512
+    #define RT_USING_SERIAL
+    #define RT_USING_SERIAL_V1
+    #define RT_SERIAL_RB_BUFSZ 64
+#endif
 #define RT_USING_PIN
 
 /* Using USB */
@@ -190,9 +194,10 @@
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
-#define BSP_USING_UART
-#define BSP_USING_UART1
-#define BSP_UART1_RX_USING_DMA
+#ifdef CMAKE_DEBUG
+    #define BSP_USING_UART
+    #define BSP_USING_UART1
+#endif
 #define BSP_USING_USBD
 
 /* Board extended module Drivers */

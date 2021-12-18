@@ -4,11 +4,15 @@ SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_PROCESSOR cortex-m3)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
-PROJECT(demo C CXX ASM)
+PROJECT(JoyStick C CXX ASM)
+
+SET(VERSION_MAJOR 1 CACHE STRING "Project major version number.")
+SET(VERSION_MINOR 0 CACHE STRING "Project minor version number.")
+SET(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     MESSAGE(STATUS "Build type: Debug")
-    SET(DBG_FLAGS "-g3 -gdwarf-2 -O0")
+    SET(DBG_FLAGS "-g3 -gdwarf-2 -O2")
 ELSEIF(CMAKE_BUILD_TYPE MATCHES Release)
     MESSAGE(STATUS "Build type: Release")
     SET(DBG_FLAGS "-Os")
@@ -30,10 +34,14 @@ SET(CMAKE_SIZE ${CROSS_COMPILE_PREFIX}size)
 SET(CMAKE_C_COMPILER_WORKS TRUE)
 SET(CMAKE_CXX_COMPILER_WORKS TRUE)
 
-SET(CMAKE_C_FLAGS " ${MCU_FLAGS} ${DBG_FLAGS} ${SECTIONS_FLAGS} -Dgcc")
-SET(CMAKE_CXX_FLAGS " ${MCU_FLAGS} ${DBG_FLAGS} ${SECTIONS_FLAGS} -Dgcc")
-SET(CMAKE_ASM_FLAGS " -c ${MCU_FLAGS} ${DBG_FLAGS} ${SECTIONS_FLAGS} -x assembler-with-cpp -Wa,-mimplicit-it=thumb")
-SET(CMAKE_EXE_LINKER_FLAGS " ${LINK_FLAGS},-u,Reset_Handler ${LINK_SCRIPTS_FLAGS}")
+SET(CMAKE_C_FLAGS_DEBUG " ${MCU_FLAGS} ${SECTIONS_FLAGS} ${DBG_FLAGS}")
+SET(CMAKE_C_FLAGS_RELEASE " ${MCU_FLAGS} ${SECTIONS_FLAGS} ${DBG_FLAGS}")
+SET(CMAKE_CXX_FLAGS_DEBUG " ${MCU_FLAGS} ${SECTIONS_FLAGS} ${DBG_FLAGS}")
+SET(CMAKE_CXX_FLAGS_RELEASE " ${MCU_FLAGS} ${SECTIONS_FLAGS} ${DBG_FLAGS}")
+SET(CMAKE_ASM_FLAGS_DEBUG " -c ${MCU_FLAGS} ${SECTIONS_FLAGS} -x assembler-with-cpp -Wa,-mimplicit-it=thumb ${DBG_FLAGS}")
+SET(CMAKE_ASM_FLAGS_RELEASE " -c ${MCU_FLAGS} ${SECTIONS_FLAGS} -x assembler-with-cpp -Wa,-mimplicit-it=thumb ${DBG_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS_DEBUG " ${LINK_FLAGS},-u,Reset_Handler ${LINK_SCRIPTS_FLAGS} ${DBG_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS_RELEASE " ${LINK_FLAGS},-u,Reset_Handler ${LINK_SCRIPTS_FLAGS} ${DBG_FLAGS}")
 
 SET(CMAKE_CXX_STANDARD 14)
 
@@ -60,12 +68,17 @@ ADD_DEFINITIONS(
 	-DUSE_HAL_DRIVER
 )
 
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
+ADD_DEFINITIONS(
+    -DCMAKE_DEBUG
+    )
+ENDIF()
+
 SET(PROJECT_SOURCES
     ${CMAKE_SOURCE_DIR}/applications/main.c
     ${CMAKE_SOURCE_DIR}/drivers/board.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_common.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_gpio.c
-    ${CMAKE_SOURCE_DIR}/drivers/drv_usart.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_usbd.c
     ${CMAKE_SOURCE_DIR}/drivers/stm32f1xx_hal_msp.c
     ${CMAKE_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32F1xx/Source/Templates/system_stm32f1xx.c
@@ -73,12 +86,9 @@ SET(PROJECT_SOURCES
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c
 	${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c
+    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c
-    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c
-    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_usart.c
-    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c
-    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd_ex.c
@@ -89,23 +99,11 @@ SET(PROJECT_SOURCES
 	${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/cortex-m3/cpuport.c
 	${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/cortex-m3/context_gcc.S
 	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/misc/pin.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/serial/serial.c
-    ${CMAKE_SOURCE_DIR}/rt-thread/components/finsh/shell.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/finsh/msh.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/finsh/cmd.c
-    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/dataqueue.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/ringbuffer.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/completion.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/pipe.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/waitqueue.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/workqueue.c
-	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/ringblk_buf.c
     ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/class/hid.c
     ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/core/usbdevice_core.c
     ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/core/usbdevice.c
     ${CMAKE_SOURCE_DIR}/rt-thread/src/ipc.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/scheduler.c
-	${CMAKE_SOURCE_DIR}/rt-thread/src/memheap.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/thread.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/irq.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/mem.c
@@ -119,12 +117,31 @@ SET(PROJECT_SOURCES
 	${CMAKE_SOURCE_DIR}/rt-thread/components/libc/compilers/newlib/minilib.c
 )
 
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
+SET(PROJECT_DEBUG_SOURCES
+    ${CMAKE_SOURCE_DIR}/drivers/drv_usart.c
+    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c
+    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/serial/serial.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/finsh/shell.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/finsh/msh.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/finsh/cmd.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/dataqueue.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/ringbuffer.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/completion.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/pipe.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/waitqueue.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/workqueue.c
+	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/ringblk_buf.c
+)
+ENDIF()
+
 LINK_DIRECTORIES(
 )
 
 LINK_LIBRARIES(
 )
 
-ADD_EXECUTABLE(${CMAKE_PROJECT_NAME}.elf ${PROJECT_SOURCES})
+ADD_EXECUTABLE(${CMAKE_PROJECT_NAME}.elf ${PROJECT_SOURCES} ${PROJECT_DEBUG_SOURCES})
 ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME}.elf POST_BUILD 
 COMMAND ${CMAKE_OBJCOPY} -O binary ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.bin COMMAND ${CMAKE_SIZE} ${CMAKE_PROJECT_NAME}.elf)

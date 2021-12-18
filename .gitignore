@@ -71,6 +71,17 @@ build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_CXX.bin
 build/CMakeFiles/3.16.3/CMakeSystem.cmake
 build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c
 build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp
+build/JoyStick.bin
+build/CMakeFiles/JoyStick.elf.dir/ASM.includecache
+build/CMakeFiles/JoyStick.elf.dir/build.make
+build/CMakeFiles/JoyStick.elf.dir/C.includecache
+build/CMakeFiles/JoyStick.elf.dir/cmake_clean.cmake
+build/CMakeFiles/JoyStick.elf.dir/depend.internal
+build/CMakeFiles/JoyStick.elf.dir/depend.make
+build/CMakeFiles/JoyStick.elf.dir/DependInfo.cmake
+build/CMakeFiles/JoyStick.elf.dir/flags.make
+build/CMakeFiles/JoyStick.elf.dir/link.txt
+build/CMakeFiles/JoyStick.elf.dir/progress.make
 build/CMakeFiles/demo.elf.dir/ASM.includecache
 build/CMakeFiles/demo.elf.dir/build.make
 build/CMakeFiles/demo.elf.dir/C.includecache
