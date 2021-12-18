@@ -38,7 +38,7 @@ SET(CMAKE_EXE_LINKER_FLAGS " ${LINK_FLAGS},-u,Reset_Handler ${LINK_SCRIPTS_FLAGS
 SET(CMAKE_CXX_STANDARD 14)
 
 INCLUDE_DIRECTORIES(
-    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/rt-thread
     ${CMAKE_SOURCE_DIR}/drivers/include
     ${CMAKE_SOURCE_DIR}/drivers/include/config
     ${CMAKE_SOURCE_DIR}/libraries/CMSIS/Include
