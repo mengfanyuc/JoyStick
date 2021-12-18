@@ -12,10 +12,10 @@ SET(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     MESSAGE(STATUS "Build type: Debug")
-    SET(DBG_FLAGS "-g3 -gdwarf-2 -O2")
+    SET(DBG_FLAGS "-g3 -gdwarf-2 -Os -Wall")
 ELSEIF(CMAKE_BUILD_TYPE MATCHES Release)
     MESSAGE(STATUS "Build type: Release")
-    SET(DBG_FLAGS "-Os")
+    SET(DBG_FLAGS "-Os -Wall")
 ENDIF()
 
 SET(CROSS_COMPILE_PREFIX arm-none-eabi-)
@@ -109,6 +109,7 @@ SET(PROJECT_SOURCES
 	${CMAKE_SOURCE_DIR}/rt-thread/src/thread.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/irq.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/mem.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/src/mempool.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/timer.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/clock.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/kservice.c

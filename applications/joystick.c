@@ -15,6 +15,7 @@
 
 
 static rt_sem_t sem_led;
+static rt_mp_t mp_button;
 static rt_mailbox_t mailbox_button;
 static rt_sem_t sem_button[BUTTON_NUM];
 
@@ -100,12 +101,13 @@ void REGISTER_BUTTON_THREAD_NAME(button)(void *param)                           
                     key_info[*num].key_enable_cnt++;                                                \
                 else                                                                                \
                 {                                                                                   \
-                    key_state = (struct __key_state *)rt_malloc(sizeof(struct __key_state));        \
-                    RT_ASSERT(key_state != RT_NULL)                                                 \
+                    key_state = (struct __key_state *)rt_mp_alloc(mp_button, 0);                    \
+                    if(key_state == RT_NULL)                                                        \
+                        break;                                                                      \
                     key_state->button_num = *num;                                                   \
                     key_state->key_state = KEY_ON;                                                  \
                     if(rt_mb_send(mailbox_button, (rt_ubase_t)key_state) != RT_EOK)                 \
-                        rt_free(key_state);                                                         \
+                        rt_mp_free(key_state);                                                      \
                     break;                                                                          \
                 }                                                                                   \
                 rt_thread_mdelay(1);                                                                \
@@ -118,12 +120,13 @@ void REGISTER_BUTTON_THREAD_NAME(button)(void *param)                           
                     key_info[*num].key_disable_cnt++;                                               \
                 else                                                                                \
                 {                                                                                   \
-                    key_state = (struct __key_state *)rt_malloc(sizeof(struct __key_state));        \
-                    RT_ASSERT(key_state != RT_NULL)                                                 \
+                    key_state = (struct __key_state *)rt_mp_alloc(mp_button, 0);                    \
+                    if(key_state == RT_NULL)                                                        \
+                        break;                                                                      \
                     key_state->button_num = *num;                                                   \
                     key_state->key_state = KEY_OFF;                                                 \
                     if(rt_mb_send(mailbox_button, (rt_ubase_t)key_state) != RT_EOK)                 \
-                        rt_free(key_state);                                                         \
+                        rt_mp_free(key_state);                                                      \
                     break;                                                                          \
                 }                                                                                   \
                 rt_thread_mdelay(1);                                                                \
@@ -270,7 +273,7 @@ void rt_usb_send_thread(void *param)
             usb_send_data[0] = (rt_uint8_t)(x_axis+1);
             usb_send_data[1] = (rt_uint8_t)(y_axis+1);
             rt_device_write(hidd, HID_REPORT_ID_JOYSTICK, usb_send_data, 3);
-            rt_free(key_state);      
+            rt_mp_free(key_state);      
         }
     }
 }
@@ -338,6 +341,10 @@ void rt_button_thread_init(void *param)
     /*create a mailbox to transfer key information to USB*/
     mailbox_button = rt_mb_create("mailbox_button", BUTTON_NUM*5, RT_IPC_FLAG_FIFO);                  
     RT_ASSERT(mailbox_button != RT_NULL)
+
+    /*create a mempool to transfer information to mailbox*/
+    mp_button = rt_mp_create("mp_button", BUTTON_NUM*5, sizeof(struct __key_state));
+    RT_ASSERT(mp_button != RT_NULL)
 
     /*create a usb send thread*/
     rt_thread_t usb_tid = rt_thread_create("usb_send",
