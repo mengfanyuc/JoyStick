@@ -215,6 +215,7 @@ extern "C" {
 #define HID_REPORT_ID_MEDIA             4
 #define HID_REPORT_ID_GENERAL           5
 #define HID_REPORT_ID_MOUSE             6
+#define HID_REPORT_ID_JOYSTICK          7
 
 /*
  * Time of usb timeout

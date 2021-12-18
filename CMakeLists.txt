@@ -48,6 +48,8 @@ INCLUDE_DIRECTORIES(
     ${CMAKE_SOURCE_DIR}/rt-thread/components/finsh
     ${CMAKE_SOURCE_DIR}/rt-thread/components/libc/compilers/common
     ${CMAKE_SOURCE_DIR}/rt-thread/components/libc/compilers/newlib
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/class
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/include/drivers
     ${CMAKE_SOURCE_DIR}/rt-thread/include
     ${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/common
     ${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/cortex-m3
@@ -64,6 +66,7 @@ SET(PROJECT_SOURCES
     ${CMAKE_SOURCE_DIR}/drivers/drv_common.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_gpio.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_usart.c
+    ${CMAKE_SOURCE_DIR}/drivers/drv_usbd.c
     ${CMAKE_SOURCE_DIR}/drivers/stm32f1xx_hal_msp.c
     ${CMAKE_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32F1xx/Source/Templates/system_stm32f1xx.c
     ${CMAKE_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32F1xx/Source/Templates/gcc/startup_stm32f103xb.s
@@ -77,6 +80,9 @@ SET(PROJECT_SOURCES
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c
     ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c
+    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.c
+    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd_ex.c
+    ${CMAKE_SOURCE_DIR}/libraries/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c
     ${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/common/div0.c
 	${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/common/showmem.c
 	${CMAKE_SOURCE_DIR}/rt-thread/libcpu/arm/common/backtrace.c
@@ -94,6 +100,9 @@ SET(PROJECT_SOURCES
 	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/waitqueue.c
 	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/workqueue.c
 	${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/src/ringblk_buf.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/class/hid.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/core/usbdevice_core.c
+    ${CMAKE_SOURCE_DIR}/rt-thread/components/drivers/usb/usbdevice/core/usbdevice.c
     ${CMAKE_SOURCE_DIR}/rt-thread/src/ipc.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/scheduler.c
 	${CMAKE_SOURCE_DIR}/rt-thread/src/memheap.c

@@ -34,6 +34,34 @@ struct hid_s
 ALIGN(4)
 const rt_uint8_t _report_desc[]=
 {
+#ifdef RT_USB_DEVICE_HID_JOYSTICK
+    USAGE_PAGE(1),      0x01,       // USAGE_PAGE (Generic Desktop)
+    USAGE(1),           0x04,       // USAGE (Joystick)
+    COLLECTION(1),      0x01,       // COLLECTION (Application)
+    USAGE(1),           0x01,       // USAGE (Pointer)
+    REPORT_ID(1),       HID_REPORT_ID_JOYSTICK,
+
+    COLLECTION(1),      0x00,       // COLLECTION (Physical)
+    USAGE(1),           0x30,       // USAGE (X)
+    USAGE(1),           0x31,       // USAGE (Y)
+    LOGICAL_MINIMUM(1), 0x00,       // LOGICAL_MINIMUM (0)
+    LOGICAL_MAXIMUM(1), 0x02,       // LOGICAL_MAXIMUM (2)
+    REPORT_SIZE(1), 0x08,           // REPORT_SIZE (8)
+    REPORT_COUNT(1), 0x02,          // REPORT_COUNT (2)
+    INPUT(1), 0x02,                 // INPUT (Data,Var,Abs)
+    END_COLLECTION(0),              // END_COLLECTION
+
+    USAGE_PAGE(1), 0x09,            // USAGE_PAGE (Button)
+    USAGE_MINIMUM(1), 0x01,         // USAGE_MINIMUM (Button 1)
+    USAGE_MAXIMUM(1), 0x08,         // USAGE_MAXIMUM (Button 8)
+    LOGICAL_MINIMUM(1), 0x00,       // LOGICAL_MINIMUM (0)
+    LOGICAL_MAXIMUM(1), 0x01,       // LOGICAL_MAXIMUM (1)
+    REPORT_SIZE(1), 0x01,           // REPORT_SIZE (1)
+    REPORT_COUNT(1), 0x08,          // REPORT_COUNT (8)
+    INPUT(1), 0x02,                 // INPUT (Data,Var,Abs)
+    END_COLLECTION(0),              // END_COLLECTION
+#endif
+
 #ifdef RT_USB_DEVICE_HID_KEYBOARD
     USAGE_PAGE(1),      0x01,
     USAGE(1),           0x06,
@@ -365,8 +393,8 @@ ALIGN(4)
 const static char* _ustring[] =
 {
     "Language",
-    "RT-Thread Team.",
-    "RTT HID-Device",
+    "M Joy Stick",
+    "M Joy Stick",
     "32021919830108",
     "Configuration",
     "Interface",
