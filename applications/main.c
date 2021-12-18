@@ -5,26 +5,18 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2019-03-08     obito0       first version
+ * 2021-12-19     mengfanyuc   first version
  */
 
-#include <rtthread.h>
-#include <rtdevice.h>
-#include <board.h>
-
-/* defined the LED0 pin: PC13 */
-#define LED0_PIN    GET_PIN(C, 13)
+#include "board.h"
+#include "joystick.h"
 
 int main(void)
 {
-    /* set LED0 pin mode to output */
-    rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
-
-    while (1)
-    {
-        rt_pin_write(LED0_PIN, PIN_HIGH);
-        rt_thread_mdelay(500);
-        rt_pin_write(LED0_PIN, PIN_LOW);
-        rt_thread_mdelay(500);
-    }
+    rt_thread_t tid = rt_thread_create("JoyStick",
+                        rt_button_thread_init, RT_NULL,
+                        512, 8, 10);
+    if (tid != RT_NULL)
+        rt_thread_startup(tid);
+    return RT_EOK;
 }

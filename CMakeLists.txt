@@ -46,6 +46,7 @@ SET(CMAKE_EXE_LINKER_FLAGS_RELEASE " ${LINK_FLAGS},-u,Reset_Handler ${LINK_SCRIP
 SET(CMAKE_CXX_STANDARD 14)
 
 INCLUDE_DIRECTORIES(
+    ${CMAKE_SOURCE_DIR}/applications
     ${CMAKE_SOURCE_DIR}/rt-thread
     ${CMAKE_SOURCE_DIR}/drivers/include
     ${CMAKE_SOURCE_DIR}/drivers/include/config
@@ -76,6 +77,7 @@ ENDIF()
 
 SET(PROJECT_SOURCES
     ${CMAKE_SOURCE_DIR}/applications/main.c
+    ${CMAKE_SOURCE_DIR}/applications/joystick.c
     ${CMAKE_SOURCE_DIR}/drivers/board.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_common.c
     ${CMAKE_SOURCE_DIR}/drivers/drv_gpio.c
