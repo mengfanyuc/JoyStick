@@ -10,6 +10,10 @@ SET(VERSION_MAJOR 1 CACHE STRING "Project major version number.")
 SET(VERSION_MINOR 0 CACHE STRING "Project minor version number.")
 SET(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 
+IF(NOT CMAKE_BUILD_TYPE) 
+    SET(CMAKE_BUILD_TYPE Release)
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     MESSAGE(STATUS "Build type: Debug")
     SET(DBG_FLAGS "-g3 -gdwarf-2 -Os -Wall")
